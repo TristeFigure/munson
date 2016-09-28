@@ -1,4 +1,4 @@
-require "active_support/core_ext/object/deep_dup"
+require 'core_ext/object/deep_dup'
 
 module Munson
   class Document
@@ -12,7 +12,7 @@ module Munson
 
       if jsonapi_document[:data] && jsonapi_document[:data][:attributes]
         @original_attributes = jsonapi_document[:data][:attributes]
-        @attributes          = jsonapi_document[:data][:attributes]#.deep_dup
+        @attributes          = jsonapi_document[:data][:attributes].deep_dup
       else
         @original_attributes = {}
         @attributes          = {}
