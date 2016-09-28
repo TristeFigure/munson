@@ -9,8 +9,8 @@ module Munson
       @jsonapi_document = jsonapi_document
 
       if jsonapi_document[:data] && jsonapi_document[:data][:attributes]
-        @original_attributes = jsonapi_document[:data][:attributes].clone
-        @attributes          = jsonapi_document[:data][:attributes].clone
+        @original_attributes = jsonapi_document[:data][:attributes].deep_dup
+        @attributes          = jsonapi_document[:data][:attributes].deep_dup
       else
         @original_attributes = {}
         @attributes          = {}
