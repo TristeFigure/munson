@@ -1,3 +1,5 @@
+require 'deep_clone'
+
 module Munson
   class Document
     attr_accessor :id
@@ -9,8 +11,8 @@ module Munson
       @jsonapi_document = jsonapi_document
 
       if jsonapi_document[:data] && jsonapi_document[:data][:attributes]
-        @original_attributes = jsonapi_document[:data][:attributes].deep_dup
-        @attributes          = jsonapi_document[:data][:attributes].deep_dup
+        @original_attributes = deep_clone jsonapi_document[:data][:attributes]
+        @attributes          = deep_clone jsonapi_document[:data][:attributes]
       else
         @original_attributes = {}
         @attributes          = {}
@@ -117,9 +119,11 @@ module Munson
       relationships[name] ? relationships[name][:data] : nil
     end
 
+    private
+
     # @param [Hash] relationship from JSONAPI relationships hash
     # @return [Munson::Document,nil] the included relationship, if found
-    private def find_included_item(relationship)
+    def find_included_item(relationship)
       resource = included.find do |included_resource|
         included_resource[:type] == relationship[:type] &&
           included_resource[:id] == relationship[:id]
@@ -135,6 +139,10 @@ module Munson
         Try adding `include=#{relationship[:type]}` to your query.
         ERR
       end
+    end
+
+    def deep_clone(obj)
+      ::DeepClone.clone obj
     end
   end
 end
